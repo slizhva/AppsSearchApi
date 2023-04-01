@@ -12,6 +12,19 @@ use App\Models\Recipe;
 class RecipesApiController extends Controller
 {
 
+    private function getSearchData(Request $request):array {
+        $type = $request->get('type');
+        $values = $request->get('values');
+        if (empty($type)) {
+            $type = json_decode($request->get('type'), true);
+            $values = json_decode($request->get('values'), true);
+        }
+        if (empty($type)) {
+            $type = json_decode($request->getContent(), true)['type'] ?? null;
+            $values = json_decode($request->getContent(), true)['values'] ?? null;
+        }
+        return [$type, $values];
+    }
     public function get(Request $request):JsonResponse
     {
         $user = User
@@ -35,12 +48,21 @@ class RecipesApiController extends Controller
             ->get(['code', 'value'])
             ->toArray();
 
+        [$searchType, $searchValues] = $this->getSearchData($request);
         $recipes = [];
         foreach ($recipesRaw as $recipeRaw) {
-            $values = preg_split("/\r\n|\n|\r/", $recipeRaw['value']);
+            $recipeValues = preg_split("/\r\n|\n|\r/", $recipeRaw['value']);
 
-            if ($values) { // TODO: compare value with requested data
-                $recipes[] = $recipeRaw['code'];
+            if (strtolower($searchType) === 'all') {
+                if (!array_diff($searchValues, $recipeValues)) {
+                    $recipes[] = $recipeRaw['code'];
+                }
+                continue;
+            }
+            if (strtolower($searchType) === 'any') {
+                if (!empty(array_intersect($searchValues, $recipeValues))) {
+                    $recipes[] = $recipeRaw['code'];
+                }
             }
         }
 

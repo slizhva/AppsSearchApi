@@ -18,5 +18,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/recipes/get/{set_id}/{token}', [\App\Http\Controllers\RecipesApiController::class, 'get'])->name('recipes.get');
+Route::post('/recipes/get/{set_id}/{token}', [\App\Http\Controllers\RecipesApiController::class, 'get'])->name('recipes.get');
 
