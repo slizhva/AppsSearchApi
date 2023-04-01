@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sets', function (Blueprint $table) {
+        Schema::create('recipes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user');
-            $table->string('name');
+            $table->unsignedBigInteger('set');
+            $table->string('code');
+            $table->longText('value');
             $table->timestamps();
 
-            $table->foreign('user')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('set')->references('id')->on('sets')->onDelete('cascade');
 
-            $table->index(['id', 'user']);
+            $table->index(['id','set']);
         });
     }
 
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sets');
+        Schema::dropIfExists('recipes');
     }
 };

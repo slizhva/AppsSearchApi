@@ -6,3 +6,42 @@
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+
+#recipesTable {
+  border: 1px solid $secondary;
+
+  th {
+    line-height: 1;
+    border-bottom: 1px solid $secondary;
+    border-left: 1px solid $secondary;
+  }
+
+  td {
+    position: relative;
+    border-bottom: 1px solid $secondary;
+    border-left: 1px solid $secondary;
+
+    .delete-form {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 20px;
+      height: 20px;
+
+      &::after {
+        content: "x";
+        position: absolute;
+        top: -3px;
+        right: -4px;
+        width: 20px;
+        height: 20px;
+        font-size: 20px;
+        pointer-events: none;
+      }
+
+      .dangerous-action-button {
+        opacity: 0;
+      }
+    }
+  }
+}

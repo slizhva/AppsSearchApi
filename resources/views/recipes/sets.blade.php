@@ -9,7 +9,7 @@
 @endsection
 
 @section('admin-title')
-    <span><a class="btn btn-link p-0" href="{{ route('sets') }}">Sets</a>/Data</span>
+    <span><a class="btn btn-link p-0" href="{{ route('sets') }}">Sets</a></span>
 @endsection
 
 @section('admin-body')
@@ -46,7 +46,7 @@
 
         <div class="row mt-5">
             <hr>
-            <div class="col-md-6">
+            <div class="col-md-9">
                 @include('components.dangerous_action_form')
             </div>
         </div>
