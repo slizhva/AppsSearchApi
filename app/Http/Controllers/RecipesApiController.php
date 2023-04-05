@@ -54,7 +54,7 @@ class RecipesApiController extends Controller
             $recipeValues = preg_split("/\r\n|\n|\r/", $recipeRaw['value']);
 
             if (strtolower($searchType) === 'all') {
-                if (!array_diff($searchValues, $recipeValues)) {
+                if (!array_diff($recipeValues, $searchValues)) {
                     $recipes[] = $recipeRaw['code'];
                 }
                 continue;
