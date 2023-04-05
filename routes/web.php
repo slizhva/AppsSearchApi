@@ -25,8 +25,9 @@ Route::post('/set/add', [\App\Http\Controllers\SetsController::class, 'add'])->n
 Route::post('/set/{set_id}/delete', [\App\Http\Controllers\SetsController::class, 'delete'])->name('set.delete');
 
 // recipe
-Route::get('/recipe/{set_id}', [\App\Http\Controllers\RecipesController::class, 'recipes'])->name('recipe');
+Route::get('/recipes/{set_id}', [\App\Http\Controllers\RecipesController::class, 'recipes'])->name('recipes');
 Route::post('/recipe/{set_id}/add', [\App\Http\Controllers\RecipesController::class, 'add'])->name('recipe.add');
+Route::post('/recipe/{set_id}/upload', [\App\Http\Controllers\RecipesController::class, 'upload'])->name('recipe.upload');
 Route::post('/recipe/{set_id}/delete', [\App\Http\Controllers\RecipesController::class, 'delete'])->name('recipe.delete');
 Route::post('/recipe/{set_id}/update', [\App\Http\Controllers\RecipesController::class, 'update'])->name('recipe.update');
 

@@ -30,7 +30,7 @@
                 @foreach($sets as $set)
                     <div class="row border-bottom align-items-center">
                         <div class="col-md-9 border-start">
-                            <a class="btn btn-link" href="{{ route('recipe', $set['id']) }}">{{ $set['name'] }}</a>
+                            <a class="btn btn-link" href="{{ route('recipes', $set['id']) }}">{{ $set['name'] }}</a>
                         </div>
                         <div class="col-md-3 border-start border-end">
                             <form method="POST" action="{{ route('set.delete', $set['id']) }}">

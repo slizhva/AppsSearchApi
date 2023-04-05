@@ -5,7 +5,7 @@
 @endsection
 
 @section('body-class')
-    col-md-8
+    col-md-12
 @endsection
 
 @section('admin-title')
@@ -30,13 +30,30 @@
 
                 <strong>---Add recipe:---</strong>
                 <div class="container">
-                    <form class="row" method="POST" action="{{ route('recipe.add', $set['id']) }}" >
-                        {{ csrf_field() }}
-                        <textarea rows="5" name="value" placeholder="Value" class="col-md-12" required></textarea>
-                        <input name="code" type="text" value="" placeholder="Code" class="col-md-9" required>
-                        <input type="submit" value="Add" class="col-md-3">
-                    </form>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <form class="row" method="POST" action="{{ route('recipe.add', $set['id']) }}" >
+                                {{ csrf_field() }}
+                                <textarea rows="5" name="value" placeholder="Value" class="col-md-12" required></textarea>
+                                <input name="code" type="text" value="" placeholder="Code" class="col-md-9" required>
+                                <input type="submit" value="Add" class="col-md-3">
+                            </form>
+                        </div>
+                        <div class="col-md-4">
+                            <form
+                                class="d-flex flex-column h-100 justify-content-center align-items-center"
+                                method="POST"
+                                action="{{ route('recipe.upload', $set['id']) }}"
+                                enctype="multipart/form-data"
+                            >
+                                {{ csrf_field() }}
+                                <input name="recipes" type="file" class="w-50 mb-2" required>
+                                <input type="submit" value="Upload" class="w-50">
+                            </form>
+                        </div>
+                    </div>
                 </div>
+
 
                 <hr class="mt-4 mb-4">
 

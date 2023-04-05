@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 use App\Models\Recipe;
 use App\Models\Set;
@@ -55,13 +56,49 @@ class RecipesController extends Controller
         $recipe->value = $request->get('value');
         $recipe->save();
 
-        return redirect()->route('recipe', (int)$set['id']);
+        return redirect()->route('recipes', (int)$set['id']);
+    }
+
+    public function upload(Request $request):RedirectResponse
+    {
+        $request->validate([
+            'recipes' => 'required'
+        ]);
+
+        $set = Set
+            ::where('id', $request->route('set_id'))
+            ->where('user', Auth::id())
+            ->limit(1)
+            ->get(['id'])
+            ->toArray()[0];
+
+
+        $storagePath = Storage::disk('local')->put('', $request->recipes);
+        $recipes = file_get_contents(Storage::path($storagePath));
+        Storage::disk('local')->delete($storagePath);
+        $recipes = preg_split("/\r\n|\n|\r/", trim($recipes));
+
+        foreach ($recipes as $recipe) {
+            if (empty($recipe)) {
+                continue;
+            }
+            [$code, $value] = explode('|', $recipe);
+            $ingredients = explode(',', $value);
+            Recipe::updateOrCreate([
+                'set' => $set['id'],
+                'code' => $code,
+            ], [
+                'value' => implode("\n", $ingredients),
+            ]);
+        }
+
+        return redirect()->route('recipes', (int)$set['id']);
     }
 
     public function delete(Request $request):RedirectResponse
     {
         if (empty($request->get('recipe_id'))) {
-            return redirect()->route('recipe', (int)$request->route('set_id'))->with('error', 'Error: Data item not found.');
+            return redirect()->route('recipes', (int)$request->route('set_id'))->with('error', 'Error: Data item not found.');
         }
 
         $set = Set
@@ -77,11 +114,11 @@ class RecipesController extends Controller
             ->limit(1);
 
         if ($recipe->count() === 0) {
-            return redirect()->route('recipe', (int)$set['id'])->with('error', 'Error: Data item not found.');
+            return redirect()->route('recipes', (int)$set['id'])->with('error', 'Error: Data item not found.');
         }
 
         $recipe->delete();
-        return redirect()->route('recipe', (int)$set['id'])->with('status', 'Success: The data item was deleted.');
+        return redirect()->route('recipes', (int)$set['id'])->with('status', 'Success: The data item was deleted.');
     }
 
     public function update(Request $request):RedirectResponse
@@ -110,6 +147,6 @@ class RecipesController extends Controller
             ]);
         }
 
-        return redirect()->route('recipe', $set['id']);
+        return redirect()->route('recipes', $set['id']);
     }
 }
