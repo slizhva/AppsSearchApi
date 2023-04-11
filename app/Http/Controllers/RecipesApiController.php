@@ -59,6 +59,12 @@ class RecipesApiController extends Controller
                 }
                 continue;
             }
+            if (strtolower($searchType) === 'all-reverse') {
+                if (!array_diff($searchValues, $recipeValues)) {
+                    $recipes[] = $recipeRaw['code'];
+                }
+                continue;
+            }
             if (strtolower($searchType) === 'any') {
                 if (!empty(array_intersect($searchValues, $recipeValues))) {
                     $recipes[] = $recipeRaw['code'];
